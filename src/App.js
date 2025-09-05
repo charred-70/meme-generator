@@ -1,10 +1,11 @@
 import './App.css';
-import './Componenets/SlotMachine';
+import { Component } from 'react';
+import SlotMachine from '*/Components/SlotMachine';
 
 function App() {
   
   return (
-      <SlotMachine></SlotMachine>
+      <SlotMachine />
   );
 }
 
