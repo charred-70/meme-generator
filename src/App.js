@@ -1,32 +1,49 @@
 import logo from './logo.svg';
 import './App.css';
-
-const handleClick = async() => {
-  try {
-    const API_KEY = "Bi5MPWQceNb6rbK7sMshxRm685V8YvXk";
-    var linker = "https://api.giphy.com/v1/gifs/random?api_key=" + API_KEY;
-    const res = await fetch(linker);
-    if(!res.ok){
-      throw new Error("Could not fetch resource"); 
-    }
-    
-    const data = await res.json();
-    console.log(data);
-    
-    var gifImg = data[0].images.original.url;
-    console.log(gifImg);
-    //document.getElementById("gif").setAttribute(gifImg);
-
-  } catch(err){
-    console.log(err)
-  }
-}
+import {useState} from "react";
 
 function App() {
+  const [ image, setImage ] = useState(logo);
+  const [ image2, setImage2 ] = useState(logo);
+  const [ image3, setImage3 ] = useState(logo);
+  const API_KEY = "Bi5MPWQceNb6rbK7sMshxRm685V8YvXk";
+
+  const callAPIReturnGif = async() => {
+    try {
+      var linker = "https://api.giphy.com/v1/gifs/random?api_key=" + API_KEY;
+      const res = await fetch(linker);
+      if(!res.ok){
+        throw new Error("Could not fetch resource"); 
+      }
+          
+      const data = await res.json();      
+          
+      var gifImg = data.data.images.original.url;
+      return gifImg;
+    } catch(err) {
+      console.log(err);
+    }
+  }
+  const whenClicked = async() => {
+    try {
+      var theGifURL = await callAPIReturnGif();
+      setImage(theGifURL);
+      theGifURL = await callAPIReturnGif();
+      setImage2(theGifURL);
+      theGifURL = await callAPIReturnGif();
+      setImage3(theGifURL)
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src={image} className="App-logo" alt="logo" />
+        <img src={image2}/>
+        <img src={image3}/>
+
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
@@ -38,10 +55,11 @@ function App() {
         >
           Learn React
         </a>
-        <button onClick={handleClick}> Click ME! </button>
+        <button onClick={whenClicked}> Click ME! </button>
       </header>     
     </div>
   );
 }
+
 
 export default App;
